@@ -19,7 +19,7 @@ function icon_metabox_settings_page() { ?>
 	
 	<div class="wrap">
 
-	<h2><?php _e( 'Fontawesome Metabox Settings', 'icon-metabox' ); ?></h2>
+	<h2><?php _e( 'Icon Metabox Settings', 'icon-metabox' ); ?></h2>
 
 	<?php
 	if ( isset( $_POST['submit_data'] ) ) {   
@@ -96,21 +96,21 @@ function icon_metabox_settings_page() { ?>
 }
 
 /**
- * Metabox (Declaration)
+ * Metabox (Add)
  */
+
+add_action('admin_print_styles', 'fontawesome_style', 11 );
+add_action('wp_enqueue_scripts','fontawesome_style');
+function fontawesome_style() {
+    wp_enqueue_style(  'fontawesome', "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+}
 
 $add_cpt = get_option('_post_types_selected');
    
 add_action('add_meta_boxes','initialisation_metabox');
 function initialisation_metabox(){
 	global $add_cpt;
-	add_meta_box('id_meta_icon', 'choisissez une icône', 'fontawesome_metabox_function', $add_cpt, 'normal', 'high');
-}
-
-add_action('admin_print_styles', 'fontawesome_style', 11 );
-add_action('wp_enqueue_scripts','fontawesome_style');
-function fontawesome_style() {
-    wp_enqueue_style(  'fontawesome', "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+	add_meta_box('id_meta_icon', 'choisissez une icône', 'icon_metabox_function', $add_cpt, 'normal', 'high');
 }
 
 /**
@@ -121,7 +121,7 @@ function array_delete($array, $element) {
     return (is_array($element)) ? array_values(array_diff($array, $element)) : array_values(array_diff($array, array($element)));
 }
 
-function fontawesome_metabox_function($post){
+function icon_metabox_function($post){
 	
 	$icons_file = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
 	$parsed_file = file_get_contents($icons_file);
@@ -161,8 +161,8 @@ function fontawesome_metabox_function($post){
  * Métabox (save)
  */
 
-add_action('save_post','save_metaboxes');
-function save_metaboxes($post_ID){
+add_action('save_post','save_icon_metabox');
+function save_icon_metabox($post_ID){
   // si la metabox est définie, on sauvegarde sa valeur
   if(isset($_POST['icon_selected'])){
     update_post_meta($post_ID,'icon_selected', esc_html($_POST['icon_selected']));
@@ -176,7 +176,7 @@ function save_metaboxes($post_ID){
 /**
  * Using in front
  */
-function fontawesome_icon(){
+function fontawesome_metabox(){
 	global $post;
 	$icon_selected = get_post_meta($post->ID,'icon_selected',true); 
 
