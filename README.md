@@ -1,4 +1,4 @@
-## Fontawesome MetaBox
+## Icon MetaBox
 
 Autor : Adrien De Meyer
 
